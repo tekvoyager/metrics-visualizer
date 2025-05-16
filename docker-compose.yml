@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  influxdb:
+    image: influxdb:2.7
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=startup-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=startup_metrics
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=supersecrettoken
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/dashboards
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - REQUESTS_CA_BUNDLE="/app/tgt-ca-bundle.crt"
+    # command: >
+    #   sh -c "update-ca-certificates && grafana-server"
+
+  metrics_emitter:
+    build: ./metrics_emitter
+    depends_on:
+      - influxdb
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_TOKEN=supersecrettoken
+      - INFLUXDB_ORG=startup-org
+      - INFLUXDB_BUCKET=startup_metrics
+
+volumes:
+  influxdb-data:
+  grafana-storage:

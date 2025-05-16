@@ -1,0 +1,37 @@
+{
+    "id": null,
+    "uid": "telemetrix-dashboard",
+    "title": "Telemetrix Dashboard",
+    "timezone": "browser",
+    "schemaVersion": 36,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "type": "timeseries",
+        "title": "Temperature Time Series",
+        "datasource": null,
+        "targets": [
+          {
+            "refId": "A",
+            "query": "from(bucket: \"startup_metrics\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"device_metrics\" and r._field == \"temperature\")"
+          }
+        ],
+        "gridPos": { "x": 0, "y": 0, "w": 24, "h": 9 }
+      },
+      {
+        "type": "barchart",
+        "title": "Temperature Distribution",
+        "datasource": null,
+        "targets": [
+          {
+            "refId": "B",
+            "query": "from(bucket: \"startup_metrics\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"device_metrics\" and r._field == \"temperature\")"
+          }
+        ],
+        "gridPos": { "x": 0, "y": 10, "w": 24, "h": 9 }
+      }
+    ]
+  ,
+  "overwrite": true
+}
