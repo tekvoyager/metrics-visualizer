@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "metrics-visualizer"
+version = "0.1.0"
+description = "visualize metrics using influx and grafana"
+authors = ["Rahul <ragulprakash.k@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<4.0"
+influxdb-client = ">=1.48.0,<2.0.0"
+uvicorn = "^0.29.0"
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

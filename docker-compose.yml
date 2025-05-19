@@ -28,12 +28,13 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
-      - REQUESTS_CA_BUNDLE="/app/tgt-ca-bundle.crt"
     # command: >
     #   sh -c "update-ca-certificates && grafana-server"
 
   metrics_emitter:
-    build: ./metrics_emitter
+    build: 
+      context: .
+      dockerfile: metrics_emitter/Dockerfile
     depends_on:
       - influxdb
     environment:
